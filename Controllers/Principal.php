@@ -85,12 +85,36 @@ class Principal extends Controller
         $data['title'] = 'Tu lista de deseos';
         $this->views->getView('principal', "deseo", $data);
     }
+    // Obtener productos a partir de la lista de deseos y carrito
+    public function listaProductos()
+    {
+        $datos = file_get_contents('php://input');
+        $json = json_decode($datos, true);
+        $array['productos'] = array();
+        $total = 0.00;
+        foreach ($json as $producto) {
+            $result = $this->model->getProducto($producto['idProducto']);
+            $data['id'] = $result['id'];
+            $data['nombre'] = $result['nombre'];
+            $data['precio'] = $result['precio'];
+            $data['cantidad'] = $producto['cantidad'];
+            $data['imagen'] = $result['imagen'];
+            $subTotal = $data['precio'] * $data['cantidad'];
+            $data['subTotal'] = number_format($subTotal, 2, '.', '');
+            array_push($array['productos'], $data);
+            $total += $subTotal;
+        }
+        $array['moneda'] = MONEDA;
+        $array['total'] = number_format($total, 2);
+        echo json_encode($array, JSON_UNESCAPED_UNICODE);
+        die;
+    }
     // Obtener productos a partir de la lista de deseos
-    public function listaDeseo()
+    /* public function listaDeseo()
     {
         $datos = file_get_contents('php://input');
         $json = json_decode($datos, true);
-        $array = array();
+        $array['productos'] = array();
         foreach ($json as $producto) {
             $result = $this->model->getProducto($producto['idProducto']);
             $data['id'] = $result['id'];
@@ -98,17 +122,19 @@ class Principal extends Controller
             $data['precio'] = $result['precio'];
             $data['cantidad'] = $producto['cantidad'];
             $data['imagen'] = $result['imagen'];
-            array_push($array, $data);
+            array_push($array['productos'], $data);
         }
+        $array['moneda'] = MONEDA;
         echo json_encode($array, JSON_UNESCAPED_UNICODE);
         die;
-    }
+    } */
     // Obtener productos en el carrito
-    public function listaCarrito()
+    /* public function listaCarrito()
     {
         $datos = file_get_contents('php://input');
         $json = json_decode($datos, true);
-        $array = array();
+        $array['productos'] = array();
+        $total = 0.00;
         foreach ($json as $producto) {
             $result = $this->model->getProducto($producto['idProducto']);
             $data['id'] = $result['id'];
@@ -116,9 +142,14 @@ class Principal extends Controller
             $data['precio'] = $result['precio'];
             $data['cantidad'] = $producto['cantidad'];
             $data['imagen'] = $result['imagen'];
-            array_push($array, $data);
+            $subTotal = $data['precio'] * $data['cantidad'];
+            $data['subTotal'] = number_format($subTotal, 2, '.', '');
+            array_push($array['productos'], $data);
+            $total += $subTotal;
         }
+        $array['moneda'] = MONEDA;
+        $array['total'] = number_format($total, 2);
         echo json_encode($array, JSON_UNESCAPED_UNICODE);
         die;
-    }
+    } */
 }

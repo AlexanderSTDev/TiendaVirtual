@@ -8,31 +8,87 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-striped table-hover" id="tableListaCarrito">
-                    <thead>
-                        <tr>
-                            <th>Imagen</th>
-                            <th>Producto</th>
-                            <th>Precio</th>
-                            <th>Cantidad</th>
-                            <th>Total</th>
-                            <th>Accion</th>
-                        </tr>
-                    </thead>
-                    <tbody id="carrito">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover align-middle" id="tableListaCarrito">
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>SubTotal</th>
+                                <th>Accion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <a href="<?php echo BASE_URL . 'clientes'; ?>" class="btn btn-outline-dark">Procesar Compra</a>
+                <h3 id="totalGeneral"></h3>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Login directo -->
+<!-- Modal -->
+<div id="modalLogin" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleLogin">Iniciar Sesión</h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body m-3">
+                <form action="<?php echo BASE_URL . 'login'; ?>" method="POST">
+                    <div class="text-center">
+                        <img src="<?php echo BASE_URL; ?>assets/img/apple-icon.png" alt="" width="100" class="mb-4 rounded rounded-circle img-thumbnail">
+                    </div>
+                    <div class="row">
+                        <!-- Formulario de login -->
+                        <div class="col-md-12" id="formLogin">
+                            <div class="form-group mb-3">
+                                <label for="correoLogin"><i class="fas fa-envelope"></i> Email</label>
+                                <input type="email" class="form-control" id="correoLogin" name="correoLogin" placeholder="Ingrese su correo electronico">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="claveLogin"><i class="fas fa-key"></i> Contraseña</label>
+                                <input type="password" class="form-control" id="claveLogin" name="claveLogin" placeholder="Ingrese su contraseña">
+                            </div>
+                            <a href="#" id="btnRegistrarse">Todavía no tienes una cuenta?</a>
+                            <div class="float-end">
+                                <button type="button" class="btn btn-outline-dark" id="login">Login</button>
+                            </div>
+                        </div>
+                        <!-- Formulario de registro -->
+                        <div class="col-md-12 d-none" id="formRegistro">
+                            <div class="form-group mb-3">
+                                <label for="nombreRegistro"><i class="fas fa-list"></i> Nombres</label>
+                                <input type="email" class="form-control" id="nombreRegistro" name="correoCliente" placeholder="Ingrese su nombre completo">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="correoRegistro"><i class="fas fa-envelope"></i> Email</label>
+                                <input type="email" class="form-control" id="correoRegistro" name="correoRegistro" placeholder="Ingrese su correo electronico">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="claveRegistro"><i class="fas fa-key"></i> Contraseña</label>
+                                <input type="password" class="form-control" id="claveRegistro" name="claveRegistro" placeholder="Ingrese su contraseña">
+                            </div>
+                            <a href="#" id="btnLogin">Ya tienes una cuenta?</a>
+                            <div class="float-end">
+                                <button type="button" class="btn btn-outline-dark" id="registrarse">Registrarse</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Start Footer -->
 <footer class="bg-dark" id="tempaltemo_footer">
@@ -139,5 +195,6 @@
     const base_url = "<?PHP echo BASE_URL; ?>";
 </script>
 <script src="<?PHP echo BASE_URL; ?>assets/js/carrito.js"></script>
+<script src="<?PHP echo BASE_URL; ?>assets/js/login.js"></script>
 <script src="<?PHP echo BASE_URL; ?>assets/js/sweetalert2.all.min.js"></script>
 <!-- End Script -->

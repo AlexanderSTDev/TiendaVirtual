@@ -72,12 +72,15 @@ function agregarDeseo(idProducto) {
 }
 
 // Agregar productos al carrito
-function agregarCarrito(idProducto, cantidad) {
+function agregarCarrito(idProducto, cantidad, accion = false) {
     if (localStorage.getItem('listaCarrito') == null) {
         listaCarrito = [];
     } else {
         let listaExiste = JSON.parse(localStorage.getItem('listaCarrito'));
         for (let i = 0; i < listaExiste.length; i++) {
+            if (accion) {
+                eliminarListaDeseo(idProducto);
+            }
             if (listaExiste[i].idProducto == idProducto) {
                 Swal.fire({
                     title: "Aviso",
@@ -122,7 +125,7 @@ function cantidadCarrito() {
 
 // ver carrito
 function getListaCarrito() {
-    const url = base_url + 'principal/listaCarrito';
+    const url = base_url + 'principal/listaProductos';
     const http = new XMLHttpRequest();
     http.open('POST', url, true);
     http.send(JSON.stringify(listaCarrito));
@@ -131,22 +134,46 @@ function getListaCarrito() {
         if (this.readyState == 4 && this.status == 200) {
             const res = JSON.parse(this.responseText);
             let html = '';
-            res.forEach(producto => {
+            res.productos.forEach(producto => {
                 html += `
                 <tr>
                     <td><img class="img-thumbnail rounded-circle" src="${producto.imagen}" alt="" width="100"></td>
                     <td>${producto.nombre}</td>
-                    <td><span class="badge bg-success">USD ${producto.precio}</span></td>
+                    <td><span class="badge bg-success">${res.moneda} ${producto.precio}</span></td>
                     <td><span class="badge bg-primary">${producto.cantidad}</span></td>
-                    <td>
-                    <button class="btn btn-danger btnEliminarDeseo" type="button" data-id="${producto.id}"><i class="far fa-trash-alt"></i></button>
-                    <button class="btn btn-info" type="button"><i class="fas fa-cart-plus"></i></button>
-                    </td>
+                    <td>${res.moneda} ${producto.subTotal}</td>
+                    <td><button class="btn btn-danger btnDeleteCart" type="button" data-id="${producto.id}"><i class="fas fa-times-circle"></i></button></td>
                 </tr>
                 `;
             });
             tableListaCarrito.innerHTML = html;
-            // btnEliminarDeseo();
+            document.querySelector('#totalGeneral').textContent = 'Total: $' + res.total;
+            btnEliminarCarrito();
         }
     }
+}
+function btnEliminarCarrito() {
+    let listaEliminar = document.querySelectorAll('.btnDeleteCart');
+    for (let i = 0; i < listaEliminar.length; i++) {
+        listaEliminar[i].addEventListener('click', function () {
+            let idProducto = listaEliminar[i].getAttribute('data-id');
+            eliminarListaCarrito(idProducto);
+        })
+    }
+}
+function eliminarListaCarrito(idProducto) {
+    for (let i = 0; i < listaCarrito.length; i++) {
+        if (listaCarrito[i].idProducto == idProducto) {
+            listaCarrito.splice(i, 1);
+            break;
+        }
+    }
+    localStorage.setItem('listaCarrito', JSON.stringify(listaCarrito));
+    getListaCarrito();
+    cantidadCarrito();
+    swal.fire({
+        title: "Aviso",
+        text: "Producto eliminado del carrito",
+        icon: "success",
+    })
 }
